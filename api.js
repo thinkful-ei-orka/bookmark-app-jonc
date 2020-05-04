@@ -20,14 +20,14 @@ function createBookmark(name) {
   });
 }
 function deleteBookmark(id) {
-  return apiFetch(url, {
+  return apiFetch(`${url}/${id}`, {
     method: 'DELETE',
   });
 }
 
 function updateBookmark(id, updateData) {
   const stringData = JSON.stringify(updateData);
-  return apiFetch(url, {
+  return apiFetch(`${url}/${id}`, {
     method: 'PATCH',
     headers: { 'Content-Type': 'application/json' },
     body: stringData,
