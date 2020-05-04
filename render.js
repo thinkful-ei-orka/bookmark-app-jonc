@@ -25,6 +25,7 @@ function homePage(params) {
           </div>
         </div>
       </section>`);
+  console.log('homepage rendering has been done');
 }
 
 function handleAddBookmarkClicked() {
@@ -66,6 +67,7 @@ function handleAddBookmarkClicked() {
         </form>
       </section>
       </section>`);
+    console.log('Render add bookmark has been run');
   });
 }
 
