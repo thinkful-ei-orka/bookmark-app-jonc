@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookmark App</title>
+    <link rel="stylesheet" href="main.css" />
+  </head>
+  <body>
+    <header>
+      <h1>
+        BOOKMARK IT
+      </h1>
+    </header>
+    <main>
+      <section class="topbuttons">
+        <button id="addbookmark">ADD BOOKMARK</button>
+        <label for="rating"></label>
+        <select name="rating" id="rating">
+          <option value="rating">RATING ⤵️</option>
+          <option value="1">1 Star +</option>
+          <option value="2">2 Stars +</option>
+          <option value="3">3 Stars +</option>
+          <option value="4">4 Stars +</option>
+          <option value="5">5 Stars +</option>
+        </select>
+      </section>
+      <section class="addingbookmark">
+        <h2>Add New Bookmark</h2>
+        <form action="submit">
+          <input type="text" name="name" placeholder="Enter a name" />
+          <input type="url" placeholder="Enter a URL" name="url" />
+          <input type="textbox" name="desc" />
+          <input type="number" placeholder="Enter a rating" />
+        </form>
+      </section>
+    </main>
+
+    <script src="https://code.jquery.com/jquery-3.5.0.min.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Scada:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="./app.js"></script>
+  </body>
+</html>

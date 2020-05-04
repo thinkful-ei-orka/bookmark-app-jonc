@@ -1,0 +1,48 @@
+function handleAddBookmarkClicked() {
+  $('#addbookmark').click(function (e) {
+    e.preventDefault();
+    $('main').html(`<section class="topbuttons">
+        <button id="addbookmark">ADD BOOKMARK</button>
+        <label for="rating"></label>
+        <select name="rating" id="rating">
+          <option value="rating">RATING ⤵️</option>
+          <option value="1">1 Star +</option>
+          <option value="2">2 Stars +</option>
+          <option value="3">3 Stars +</option>
+          <option value="4">4 Stars +</option>
+          <option value="5">5 Stars +</option>
+        </select>
+      </section>
+      <section class="addingbookmark">
+        <h2>Add New Bookmark</h2>
+       <section class="topbuttons">
+        <button id="addbookmark">ADD BOOKMARK</button>
+        <label for="rating"></label>
+        <select name="rating" id="rating">
+          <option value="rating">RATING ⤵️</option>
+          <option value="1">1 Star +</option>
+          <option value="2">2 Stars +</option>
+          <option value="3">3 Stars +</option>
+          <option value="4">4 Stars +</option>
+          <option value="5">5 Stars +</option>
+        </select>
+      </section>
+      <section class="addingbookmark">
+        <h2>Add New Bookmark</h2>
+        <form action="submit">
+          <input type="text" name="name" placeholder="Enter a name" />
+          <input type="url" placeholder="Enter a URL" name="url" />
+          <input type="textbox" name="desc" />
+          <input type="number" />
+        </form>
+      </section>
+      </section>`);
+    $(':radio').change(function () {
+      console.log('New star rating: ' + this.value);
+    });
+  });
+}
+
+export default {
+  handleAddBookmarkClicked,
+};
