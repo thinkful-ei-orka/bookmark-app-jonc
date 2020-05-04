@@ -1,11 +1,15 @@
-// import app from './app.js';
+import api from './api.js';
 import render from './render.js';
 import store from './store.js';
 
 function main() {
-  render.homePage();
-  render.handleAddBookmarkClicked();
-  store.getBookmarks();
+  api.getBookmarks().then((bookmarks) => {
+    bookmarks.forEach((element) => {
+      store.addBookmark(element);
+    });
+  });
 }
+render.homePage();
+render.handleAddBookmarkClicked();
 
 $(main);

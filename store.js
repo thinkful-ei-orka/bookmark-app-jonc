@@ -1,22 +1,13 @@
-/**
- * API Url
- */
-const url = 'https://thinkful-list-api.herokuapp.com/jonc/bookmarks';
+const bookmarks = [];
 
-/**
- * GET list of items from API
- *
- */
-function getBookmarks() {
-  return fetch(url)
-    .then((response) => response.json())
-    .then((data) => {
-      data.forEach((element) => {
-        console.log(element);
-      });
-    });
+function addBookmark(bookmark) {
+  bookmarks.push(bookmark);
+}
+function findById(id) {
+  return bookmarks.find((e) => e.id === id);
 }
 
 export default {
-  getBookmarks,
+  addBookmark,
+  findById,
 };
