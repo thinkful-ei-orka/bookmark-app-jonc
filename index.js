@@ -8,8 +8,10 @@ function main() {
       store.addBookmark(element);
     });
   });
+  render.homePage();
+  render.handleAddBookmarkClicked();
+
+  console.log(api.getBookmarks());
 }
-render.homePage();
-render.handleAddBookmarkClicked();
 
 $(main);

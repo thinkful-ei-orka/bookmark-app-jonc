@@ -71,6 +71,10 @@ function handleAddBookmarkClicked() {
   });
 }
 
+function generateBookmarks(bookmark) {}
+
+function generateBookmarkItems() {}
+
 export default {
   homePage,
   handleAddBookmarkClicked,
