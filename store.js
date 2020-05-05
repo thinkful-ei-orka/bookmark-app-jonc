@@ -10,4 +10,5 @@ function findById(id) {
 export default {
   addBookmark,
   findById,
+  bookmarks,
 };

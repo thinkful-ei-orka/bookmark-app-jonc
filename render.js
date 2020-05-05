@@ -1,3 +1,5 @@
+import store from './store.js';
+
 function homePage(params) {
   $('main').html(`<section class="topbuttons">
         <button id="addbookmark">ADD BOOKMARK</button>
@@ -12,18 +14,7 @@ function homePage(params) {
         </select>
       </section>
       <section class="bookmark-section">
-        <div class="bookmark">
-          <span class="bookmark-name">Placeholder</span>
-          <span class="separator"></span>
 
-          <div class="starbox">
-            <span class="stars">★</span>
-            <span class="stars">★</span>
-            <span class="stars">★</span>
-            <span class="stars">★</span>
-            <span class="stars">★</span>
-          </div>
-        </div>
       </section>`);
   console.log('homepage rendering has been done');
 }
@@ -71,11 +62,89 @@ function handleAddBookmarkClicked() {
   });
 }
 
-function generateBookmarks(bookmark) {}
+function generateBookmarks(bookmark) {
+  const listItems = bookmark.map((item) => generateBookmarkItems(item));
+  return listItems;
+}
 
-function generateBookmarkItems() {}
+//Get rating num from bookmark array
+//take num and print span with star 'num' of times
+//return that html
+// function generateStars(rating) {
+//   let starSpan = '<span class="stars">★</span>';
+//   // let bookmarkRatingNum = bookmark.rating;
+//   console.log(rating);
+//   let totalSpans = [];
+//   console.log(totalSpans);
+
+//   for (bookmark.rating in bookmark) {
+//     totalSpans.push(starSpan);
+//   }
+//   console.log(totalSpans);
+//   return totalSpans;
+// }
+
+function generateBookmarkItems(bookmark) {
+  console.log(bookmark.rating);
+  // let ratingNum = bookmark.rating;
+  // let totalStars = generateStars([bookmark.rating]);
+  let starSpan = '<span class="stars">★</span>';
+
+  return `<div class="bookmark">
+          <span class="bookmark-name">${bookmark.title}</span>
+          <span class="separator"></span>
+
+          <div class="starbox">
+          ${starSpan.repeat(bookmark.rating)}
+
+
+
+          </div>
+        </div>`;
+}
+
+function handleRatingButton() {
+  // Watch for change on rating button
+  $('#rating').click(function (e) {
+    e.preventDefault();
+    // Get the value of the selected rating button
+    console.log(e.currentTarget.value);
+    let setRating = e.currentTarget.value;
+    // Foreach object that has .rating >= the value of button
+    let items = store.bookmarks;
+    let filteredArray = items.filter((item) => item.rating >= setRating);
+    generateBookmarks(filteredArray);
+  });
+}
+
+// Return new string of bookmarks
+// Render page
+
+/**
+ * End functions
+ */
+
+function render() {
+  // Filter item list if store prop is true by item.checked === false
+  let items = [...store.bookmarks];
+  console.log(items);
+
+  // render the shopping list in the DOM
+  const bookmarksString = generateBookmarks(items);
+  // const ratingValue = $('#rating').val();
+  // if (ratingValue !== 'rating') {
+  //   handleRatingButton(ratingValue, bookmarksString);
+  // }
+  // insert that HTML into the DOM
+  $('.bookmark-section').html(bookmarksString);
+}
+
+function bindEventListeners() {
+  handleAddBookmarkClicked(), handleRatingButton();
+}
 
 export default {
+  render,
   homePage,
-  handleAddBookmarkClicked,
+  bindEventListeners,
 };

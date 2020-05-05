@@ -6,10 +6,11 @@ function main() {
   api.getBookmarks().then((bookmarks) => {
     bookmarks.forEach((element) => {
       store.addBookmark(element);
+      render.render();
     });
   });
   render.homePage();
-  render.handleAddBookmarkClicked();
+  render.bindEventListeners();
 
   console.log(api.getBookmarks());
 }
