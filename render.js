@@ -1,6 +1,6 @@
 import store from './store.js';
 
-function homePage(params) {
+function homePage() {
   $('main').html(`<section class="topbuttons">
         <button id="addbookmark">ADD BOOKMARK</button>
         <label for="rating"></label>
@@ -22,39 +22,16 @@ function homePage(params) {
 function handleAddBookmarkClicked() {
   $('#addbookmark').click(function (e) {
     e.preventDefault();
-    $('main').html(`<section class="topbuttons">
-        <button id="addbookmark">ADD BOOKMARK</button>
-        <label for="rating"></label>
-        <select name="rating" id="rating">
-          <option value="rating">RATING ⤵️</option>
-          <option value="1">1 Star +</option>
-          <option value="2">2 Stars +</option>
-          <option value="3">3 Stars +</option>
-          <option value="4">4 Stars +</option>
-          <option value="5">5 Stars +</option>
-        </select>
-      </section>
+    $('main').html(`
+
       <section class="addingbookmark">
         <h2>Add New Bookmark</h2>
-       <section class="topbuttons">
-        <button id="addbookmark">ADD BOOKMARK</button>
-        <label for="rating"></label>
-        <select name="rating" id="rating">
-          <option value="rating">RATING ⤵️</option>
-          <option value="1">1 Star +</option>
-          <option value="2">2 Stars +</option>
-          <option value="3">3 Stars +</option>
-          <option value="4">4 Stars +</option>
-          <option value="5">5 Stars +</option>
-        </select>
-      </section>
-      <section class="addingbookmark">
-        <h2>Add New Bookmark</h2>
-        <form action="submit">
-          <input type="text" name="name" placeholder="Enter a name" />
-          <input type="url" placeholder="Enter a URL" name="url" />
-          <input type="textbox" name="desc" />
-          <input type="number" />
+        <form id="addbookmarkform">
+          <input type="text" id="name" name="name" placeholder="Enter a name" />
+          <input type="url" id="url" placeholder="Enter a URL" name="url" />
+          <input type="textbox" id="desc" name="desc" />
+          <input type="number" id="rating"/>
+          <input type="submit"/>
         </form>
       </section>
       </section>`);
@@ -103,6 +80,30 @@ function generateBookmarkItems(bookmark) {
         </div>`;
 }
 
+function handleBookmarkSubmit() {
+  $('#addbookmarkform').submit(function (event) {
+    event.preventDefault();
+    console.log(event);
+
+    const name = $('input #name').val();
+    const url = $('input #url').val();
+    const desc = $('input #desc').val();
+    const rating = $('input #rating').val();
+    console.log(bookmarkName);
+    console.log(bookmarkUrl);
+
+    // $('#name').val('');
+    // $('#url').val('');
+    // $('#desc').val('');
+    // $('#rating').val('');
+
+    api.createBookmark(name, desc, url, rating).then((newItem) => {
+      store.addBookmark(newItem);
+      // render();
+    }); //.catch((err) => renderError(err))
+  });
+}
+
 function handleRatingButton() {
   // Watch for change on rating button
   $('#rating').click(function (e) {
@@ -110,15 +111,21 @@ function handleRatingButton() {
     // Get the value of the selected rating button
     console.log(e.currentTarget.value);
     let setRating = e.currentTarget.value;
+
     // Foreach object that has .rating >= the value of button
     let items = store.bookmarks;
     let filteredArray = items.filter((item) => item.rating >= setRating);
-    generateBookmarks(filteredArray);
+    console.log(filteredArray);
+    // Return new string of bookmarks
+    const filteredString = generateBookmarks(filteredArray);
+    // Render page
+    $('.bookmark-section').html(filteredString);
+    // If rating is default, render home page
+    if (setRating === 'rating') {
+      render();
+    }
   });
 }
-
-// Return new string of bookmarks
-// Render page
 
 /**
  * End functions
@@ -140,7 +147,9 @@ function render() {
 }
 
 function bindEventListeners() {
-  handleAddBookmarkClicked(), handleRatingButton();
+  handleAddBookmarkClicked();
+  handleRatingButton();
+  handleBookmarkSubmit();
 }
 
 export default {
