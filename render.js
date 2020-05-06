@@ -25,17 +25,18 @@ function handleAddBookmarkClicked() {
     $('main').html(`
 
       <section class="addingbookmark">
-        <h2>Add New Bookmark</h2>
-        <form class="addbookmarkform" name>
-          <input type="text" id="formname" name="title" placeholder="Enter a name" />
-          <input type="url" id="formurl" placeholder="Enter a URL" name="url" />
-          <input type="text" id="formdesc" name="desc" />
-          <input type="number" id="formrating" name="rating"/>
-          <input type="submit">'
-        </form>
-      </section>
-      </section>`);
+  <h2>Add New Bookmark</h2>
+  <form class="addbookmarkform">
+    <input type="text" id="formname" name="title" placeholder="Enter a name" />
+    <input type="url" id="formurl" placeholder="Enter a URL" name="url" />
+    <input type="text" id="formdesc" name="desc" />
+    <input type="number" id="formrating" name="rating" />
+    <input type="submit" />
+  </form>
+</section>
+`);
     console.log('Render add bookmark has been run');
+    handleBookmarkSubmit();
   });
 }
 
@@ -84,34 +85,25 @@ function handleBookmarkSubmit() {
   $('.addbookmarkform').submit(function (e) {
     e.preventDefault();
     console.log(event);
+    let title = $('#formname').val();
+    let url = $('#formurl').val();
+    let desc = $('#formdesc').val();
+    let rating = $('#formrating').val();
     const newBookmarkData = {
-      title: $('#formname').val(),
-      url: $('#formurl').val(),
-      desc: $('#formdesc').val(),
-      rating: $('#formrating').val(),
+      title: title,
+      url: url,
+      desc: desc,
+      rating: rating,
     };
 
-    // const name = $('input #name').val();
-    // const url = $('input #url').val();
-    // const desc = $('input #desc').val();
-    // const rating = $('input #rating').val();
-    // console.log(name);
-    // console.log(url);
-
-    // $('#name').val('');
-    // $('#url').val('');
-    // $('#desc').val('');
-    // $('#rating').val('');
     console.log(newBookmarkData);
-    api
-      .createBookmark(newBookmarkData)
-      .then((newItem) => {
-        console.log(newItem);
+    return api.createBookmark(newBookmarkData).then((newItem) => {
+      store.addBookmark(newItem);
+    });
 
-        store.addBookmark(newItem);
-      })
-      .catch((err) => renderError(err));
+    // .catch((err) => renderError(err));
   });
+  render();
 }
 
 function handleRatingButton() {
@@ -142,17 +134,11 @@ function handleRatingButton() {
  */
 
 function render() {
-  // Filter item list if store prop is true by item.checked === false
   let items = [...store.bookmarks];
   console.log(items);
 
-  // render the shopping list in the DOM
   const bookmarksString = generateBookmarks(items);
-  // const ratingValue = $('#rating').val();
-  // if (ratingValue !== 'rating') {
-  //   handleRatingButton(ratingValue, bookmarksString);
-  // }
-  // insert that HTML into the DOM
+
   $('.bookmark-section').html(bookmarksString);
 }
 

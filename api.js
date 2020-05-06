@@ -42,14 +42,16 @@ function getBookmarks() {
  * @param {string} url
  * @param {number} rating
  */
-const createBookmark = function (bookmark) {
+function createBookmark(bookmark) {
+  console.log('createBookmark ran');
+
   let newBookmark = JSON.stringify(bookmark);
-  return apiFetch(`${BASE_URL}/bookmarks/`, {
+  return apiFetch(`${BASE_URL}/bookmarks`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: newBookmark,
   });
-};
+}
 
 /**
  * Gets the id of the object needing deletion and send a DELETE request to API
@@ -74,6 +76,5 @@ export default {
   getBookmarks,
   createBookmark,
   apiFetch,
-
   deleteBookmark,
 };
