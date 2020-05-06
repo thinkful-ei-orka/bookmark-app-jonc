@@ -17,8 +17,8 @@ function homePage() {
       <section class="bookmark-section">
 
       </section>`);
-  handleDeleteBookmark();
   console.log('homepage rendering has been done');
+  handleDeleteBookmark();
 }
 
 function handleAddBookmarkClicked() {
@@ -37,7 +37,7 @@ function handleAddBookmarkClicked() {
 </section>
 `);
     console.log('Render add bookmark has been run');
-    handleBookmarkSubmit();
+    handleBookmarkSubmit(); //This took me 5 hours to figure out... :( Ill never forget
   });
 }
 
@@ -74,10 +74,7 @@ function generateBookmarkItems(bookmark) {
 
           <div class="starbox">
           ${starSpan.repeat(bookmark.rating)}
-
-
-
-          </div>
+ </div>
           <button class="deletebtn">Delete</button>
         </div>`;
 }
@@ -132,11 +129,12 @@ function handleRatingButton() {
 
 function getBookmarkId(bookmark) {
   console.log('getBookmarkId hit');
-  $(bookmark).closest('.bookmark').data('data-item-id');
+  return $(bookmark).closest('.bookmark').data('item-id');
 }
 
 function handleDeleteBookmark() {
   $('.deletebtn').click(function (event) {
+    event.preventDefault();
     const id = getBookmarkId(event.currentTarget);
     console.log(id);
     api.deleteBookmark(id).then(() => {
