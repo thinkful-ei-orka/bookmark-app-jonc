@@ -17,8 +17,6 @@ function homePage() {
       <section class="bookmark-section">
 
       </section>`);
-  console.log('homepage rendering has been done');
-  handleDeleteBookmark();
 }
 
 function handleAddBookmarkClicked() {
@@ -35,9 +33,52 @@ function handleAddBookmarkClicked() {
     <input type="submit" />
   </form>
 </section>
+
+<button class="backbutton"> Back</button>
 `);
-    console.log('Render add bookmark has been run');
     handleBookmarkSubmit(); //This took me 5 hours to figure out... :( Ill never forget
+    handleBackButton();
+  });
+}
+function renderMoreInfo(bookmark) {
+  let starSpan = '<span class="stars">★</span>';
+  $('main').html(`<section class="bookmark-info">
+  <h2>${bookmark.title}</h2>
+  <div class="starbox">
+    ${starSpan.repeat(bookmark.rating)}
+  </div>
+  <div class="full-bookmark-desc">${bookmark.desc}</div>
+  <div class="full-bookmark-link">
+    <a href="${bookmark.url}">Visit Site</a>
+  </div>
+  <button class="backbutton"> Back</button>
+</section>`);
+  handleBackButton();
+  render();
+}
+
+function handleMoreInfoClick() {
+  $('.moreinfo').click(function (e) {
+    event.preventDefault();
+    const id = getBookmarkId(event.currentTarget);
+
+    let selectedBookmark = store.findById(id);
+    renderMoreInfo(selectedBookmark);
+
+    // api.deleteBookmark(id).then(() => {
+    //   store.findAndDelete(id);
+    // homePage();
+    render();
+  });
+}
+
+function handleBackButton() {
+  $('.backbutton').click(function (e) {
+    e.preventDefault();
+
+    homePage();
+
+    render();
   });
 }
 
@@ -45,23 +86,6 @@ function generateBookmarks(bookmark) {
   const listItems = bookmark.map((item) => generateBookmarkItems(item));
   return listItems;
 }
-
-//Get rating num from bookmark array
-//take num and print span with star 'num' of times
-//return that html
-// function generateStars(rating) {
-//   let starSpan = '<span class="stars">★</span>';
-//   // let bookmarkRatingNum = bookmark.rating;
-//   console.log(rating);
-//   let totalSpans = [];
-//   console.log(totalSpans);
-
-//   for (bookmark.rating in bookmark) {
-//     totalSpans.push(starSpan);
-//   }
-//   console.log(totalSpans);
-//   return totalSpans;
-// }
 
 function generateBookmarkItems(bookmark) {
   // let ratingNum = bookmark.rating;
@@ -75,14 +99,15 @@ function generateBookmarkItems(bookmark) {
           <div class="starbox">
           ${starSpan.repeat(bookmark.rating)}
  </div>
+  <button class="moreinfo">More Info</button>
           <button class="deletebtn">Delete</button>
+
         </div>`;
 }
 
 function handleBookmarkSubmit() {
   $('.addbookmarkform').submit(function (e) {
     e.preventDefault();
-    console.log(event);
     let title = $('#formname').val();
     let url = $('#formurl').val();
     let desc = $('#formdesc').val();
@@ -109,17 +134,16 @@ function handleRatingButton() {
   $('#rating').click(function (e) {
     e.preventDefault();
     // Get the value of the selected rating button
-    console.log(e.currentTarget.value);
     let setRating = e.currentTarget.value;
 
     // Foreach object that has .rating >= the value of button
     let items = store.bookmarks;
     let filteredArray = items.filter((item) => item.rating >= setRating);
-    console.log(filteredArray);
     // Return new string of bookmarks
     const filteredString = generateBookmarks(filteredArray);
     // Render page
     $('.bookmark-section').html(filteredString);
+
     // If rating is default, render home page
     if (setRating === 'rating') {
       render();
@@ -128,7 +152,6 @@ function handleRatingButton() {
 }
 
 function getBookmarkId(bookmark) {
-  console.log('getBookmarkId hit');
   return $(bookmark).closest('.bookmark').data('item-id');
 }
 
@@ -136,7 +159,6 @@ function handleDeleteBookmark() {
   $('.deletebtn').click(function (event) {
     event.preventDefault();
     const id = getBookmarkId(event.currentTarget);
-    console.log(id);
     api.deleteBookmark(id).then(() => {
       store.findAndDelete(id);
       // homePage();
@@ -155,6 +177,10 @@ function render() {
   const bookmarksString = generateBookmarks(items);
 
   $('.bookmark-section').html(bookmarksString);
+  handleDeleteBookmark();
+  handleMoreInfoClick();
+  handleRatingButton();
+  handleAddBookmarkClicked();
 }
 
 function bindEventListeners() {
@@ -162,6 +188,8 @@ function bindEventListeners() {
   handleRatingButton();
   handleBookmarkSubmit();
   handleDeleteBookmark();
+  handleBackButton();
+  handleMoreInfoClick();
 }
 
 export default {

@@ -43,8 +43,6 @@ function getBookmarks() {
  * @param {number} rating
  */
 function createBookmark(bookmark) {
-  console.log('createBookmark ran');
-
   let newBookmark = JSON.stringify(bookmark);
   return apiFetch(`${BASE_URL}/bookmarks`, {
     method: 'POST',
