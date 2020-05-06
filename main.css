@@ -69,8 +69,34 @@ button {
   font-size: 16px;
   border-radius: 5px;
 }
+.addbookmarkform * {
+  margin: 5px auto;
+  font-size: 20px;
+  width: auto;
+}
+
+.bookmark-info {
+  font-size: 20px;
+}
+.full-bookmark-desc {
+  margin: 10px auto;
+}
+.full-bookmark-link {
+  margin: 10px auto;
+}
+
 @media screen and (min-width: 800px) {
   main {
     width: 800px;
+  }
+  .addbookmarkform {
+    display: flex;
+    flex-direction: column;
+    align-content: space-between;
+  }
+  .addbookmarkform * {
+    margin: 5px auto;
+    font-size: 20px;
+    width: auto;
   }
 }
