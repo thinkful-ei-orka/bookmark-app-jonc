@@ -2,7 +2,7 @@
 
 Application to collect and handle your favorite bookmarks.
 
-Link:
+Link: http://thinkful-ei-orka.github.io/bookmark-app-jonc/
 
 ### User stories:
 
