@@ -4,7 +4,7 @@ import api from './api.js';
 function homePage() {
   $('main').html(`<section class="topbuttons">
         <button id="addbookmark">ADD BOOKMARK</button>
-        <label for="rating"></label>
+
         <select name="rating" id="rating">
           <option value="rating">RATING ⤵️</option>
           <option value="1">1 Star +</option>
@@ -30,7 +30,7 @@ function handleAddBookmarkClicked() {
     <input type="url" id="formurl" placeholder="Enter a URL" name="url"  required/>
     <input type="text" id="formdesc" name="desc" required/>
     <input type="number" id="formrating" name="rating" required/>
-    <input type="submit" />
+    <input type="submit" id="submitbutton" />
   </form>
 </section>
 
@@ -94,7 +94,6 @@ function generateBookmarkItems(bookmark) {
 
   return `<div class="bookmark" data-item-id="${bookmark.id}">
           <span class="bookmark-name">${bookmark.title}</span>
-          <span class="separator"></span>
 
           <div class="starbox">
           ${starSpan.repeat(bookmark.rating)}
