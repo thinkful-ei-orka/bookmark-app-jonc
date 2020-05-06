@@ -28,8 +28,8 @@ function handleAddBookmarkClicked() {
   <form class="addbookmarkform">
     <input type="text" id="formname" name="title" placeholder="Enter a name" required />
     <input type="url" id="formurl" placeholder="Enter a URL" name="url"  required/>
-    <input type="text" id="formdesc" name="desc" required/>
-    <input type="number" id="formrating" name="rating" required/>
+    <textarea   id="formdesc" name="desc" placeholder="Enter a description for this bookmark" required/></textarea>
+    <input type="number" id="formrating" name="rating" placeholder="Rate the bookmark" required/>
     <input type="submit" id="submitbutton" />
   </form>
 </section>
