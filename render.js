@@ -17,6 +17,7 @@ function homePage() {
       <section class="bookmark-section">
 
       </section>`);
+  handleDeleteBookmark();
   console.log('homepage rendering has been done');
 }
 
@@ -63,12 +64,11 @@ function generateBookmarks(bookmark) {
 // }
 
 function generateBookmarkItems(bookmark) {
-  console.log(bookmark.rating);
   // let ratingNum = bookmark.rating;
   // let totalStars = generateStars([bookmark.rating]);
   let starSpan = '<span class="stars">★</span>';
 
-  return `<div class="bookmark">
+  return `<div class="bookmark" data-item-id="${bookmark.id}">
           <span class="bookmark-name">${bookmark.title}</span>
           <span class="separator"></span>
 
@@ -78,6 +78,7 @@ function generateBookmarkItems(bookmark) {
 
 
           </div>
+          <button class="deletebtn">Delete</button>
         </div>`;
 }
 
@@ -96,14 +97,14 @@ function handleBookmarkSubmit() {
       rating: rating,
     };
 
-    console.log(newBookmarkData);
-    return api.createBookmark(newBookmarkData).then((newItem) => {
+    api.createBookmark(newBookmarkData).then((newItem) => {
       store.addBookmark(newItem);
+      homePage();
+      render();
     });
 
     // .catch((err) => renderError(err));
   });
-  render();
 }
 
 function handleRatingButton() {
@@ -129,13 +130,29 @@ function handleRatingButton() {
   });
 }
 
+function getBookmarkId(bookmark) {
+  console.log('getBookmarkId hit');
+  $(bookmark).closest('.bookmark').data('data-item-id');
+}
+
+function handleDeleteBookmark() {
+  $('.deletebtn').click(function (event) {
+    const id = getBookmarkId(event.currentTarget);
+    console.log(id);
+    api.deleteBookmark(id).then(() => {
+      store.findAndDelete(id);
+      // homePage();
+      render();
+    });
+  });
+}
+
 /**
  * End functions
  */
 
 function render() {
   let items = [...store.bookmarks];
-  console.log(items);
 
   const bookmarksString = generateBookmarks(items);
 
@@ -146,6 +163,7 @@ function bindEventListeners() {
   handleAddBookmarkClicked();
   handleRatingButton();
   handleBookmarkSubmit();
+  handleDeleteBookmark();
 }
 
 export default {
