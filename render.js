@@ -1,4 +1,5 @@
 import store from './store.js';
+import api from './api.js';
 
 function homePage() {
   $('main').html(`<section class="topbuttons">
@@ -21,17 +22,16 @@ function homePage() {
 
 function handleAddBookmarkClicked() {
   $('#addbookmark').click(function (e) {
-    e.preventDefault();
     $('main').html(`
 
       <section class="addingbookmark">
         <h2>Add New Bookmark</h2>
-        <form id="addbookmarkform">
-          <input type="text" id="name" name="name" placeholder="Enter a name" />
-          <input type="url" id="url" placeholder="Enter a URL" name="url" />
-          <input type="textbox" id="desc" name="desc" />
-          <input type="number" id="rating"/>
-          <input type="submit"/>
+        <form class="addbookmarkform" name>
+          <input type="text" id="formname" name="title" placeholder="Enter a name" />
+          <input type="url" id="formurl" placeholder="Enter a URL" name="url" />
+          <input type="text" id="formdesc" name="desc" />
+          <input type="number" id="formrating" name="rating"/>
+          <input type="submit">'
         </form>
       </section>
       </section>`);
@@ -81,26 +81,36 @@ function generateBookmarkItems(bookmark) {
 }
 
 function handleBookmarkSubmit() {
-  $('#addbookmarkform').submit(function (event) {
-    event.preventDefault();
+  $('.addbookmarkform').submit(function (e) {
+    e.preventDefault();
     console.log(event);
+    const newBookmarkData = {
+      title: $('#formname').val(),
+      url: $('#formurl').val(),
+      desc: $('#formdesc').val(),
+      rating: $('#formrating').val(),
+    };
 
-    const name = $('input #name').val();
-    const url = $('input #url').val();
-    const desc = $('input #desc').val();
-    const rating = $('input #rating').val();
-    console.log(bookmarkName);
-    console.log(bookmarkUrl);
+    // const name = $('input #name').val();
+    // const url = $('input #url').val();
+    // const desc = $('input #desc').val();
+    // const rating = $('input #rating').val();
+    // console.log(name);
+    // console.log(url);
 
     // $('#name').val('');
     // $('#url').val('');
     // $('#desc').val('');
     // $('#rating').val('');
+    console.log(newBookmarkData);
+    api
+      .createBookmark(newBookmarkData)
+      .then((newItem) => {
+        console.log(newItem);
 
-    api.createBookmark(name, desc, url, rating).then((newItem) => {
-      store.addBookmark(newItem);
-      // render();
-    }); //.catch((err) => renderError(err))
+        store.addBookmark(newItem);
+      })
+      .catch((err) => renderError(err));
   });
 }
 

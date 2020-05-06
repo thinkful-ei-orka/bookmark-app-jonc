@@ -1,7 +1,7 @@
 /**
  * API Url
  */
-const url = 'https://thinkful-list-api.herokuapp.com/jonc/bookmarks';
+const BASE_URL = 'https://thinkful-list-api.herokuapp.com/jonc';
 
 /**
  * Main API function call that accepts all arguements passed to it
@@ -9,15 +9,30 @@ const url = 'https://thinkful-list-api.herokuapp.com/jonc/bookmarks';
  * @param  {...any} args
  */
 function apiFetch(...args) {
-  return fetch(...args).then((res) => res.json());
-  console.log('apiFetch was run');
+  let error = false;
+  return fetch(...args)
+    .then((response) => {
+      if (!response.ok) {
+        error = { code: response.status };
+      }
+
+      return response.json();
+    })
+    .then((data) => {
+      if (error) {
+        error.message = data.message;
+        return Promise.reject(error);
+      }
+
+      return data;
+    });
 }
 
 /**
  * Grabs the current bookmarks by running apiFetch() with URL variable
  */
 function getBookmarks() {
-  return apiFetch(url);
+  return apiFetch(`${BASE_URL}/bookmarks/`);
 }
 
 /**
@@ -27,21 +42,21 @@ function getBookmarks() {
  * @param {string} url
  * @param {number} rating
  */
-function createBookmark(name, desc, url, rating) {
-  const newBookmark = JSON.stringify({ name, desc, url, rating });
-  return apiFetch(url, {
+const createBookmark = function (bookmark) {
+  let newBookmark = JSON.stringify(bookmark);
+  return apiFetch(`${BASE_URL}/bookmarks/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: newBookmark,
   });
-}
+};
 
 /**
  * Gets the id of the object needing deletion and send a DELETE request to API
  * @param {string} id
  */
 function deleteBookmark(id) {
-  return apiFetch(`${url}/${id}`, {
+  return apiFetch(`${BASE_URL}/bookmarks/${id}`, {
     method: 'DELETE',
   });
 }

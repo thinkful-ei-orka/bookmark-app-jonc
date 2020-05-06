@@ -11,8 +11,6 @@ function main() {
   });
   render.homePage();
   render.bindEventListeners();
-
-  console.log(api.getBookmarks());
 }
 
 $(main);
