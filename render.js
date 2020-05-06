@@ -26,10 +26,10 @@ function handleAddBookmarkClicked() {
       <section class="addingbookmark">
   <h2>Add New Bookmark</h2>
   <form class="addbookmarkform">
-    <input type="text" id="formname" name="title" placeholder="Enter a name" />
-    <input type="url" id="formurl" placeholder="Enter a URL" name="url" />
-    <input type="text" id="formdesc" name="desc" />
-    <input type="number" id="formrating" name="rating" />
+    <input type="text" id="formname" name="title" placeholder="Enter a name" required />
+    <input type="url" id="formurl" placeholder="Enter a URL" name="url"  required/>
+    <input type="text" id="formdesc" name="desc" required/>
+    <input type="number" id="formrating" name="rating" required/>
     <input type="submit" />
   </form>
 </section>
@@ -119,11 +119,17 @@ function handleBookmarkSubmit() {
       rating: rating,
     };
 
-    api.createBookmark(newBookmarkData).then((newItem) => {
-      store.addBookmark(newItem);
-      homePage();
-      render();
-    });
+    api
+      .createBookmark(newBookmarkData)
+      .then((newItem) => {
+        store.addBookmark(newItem);
+        homePage();
+        render();
+      })
+      .catch(function (err) {
+        console.log(err);
+        submitError(err);
+      });
 
     // .catch((err) => renderError(err));
   });
@@ -148,6 +154,7 @@ function handleRatingButton() {
     if (setRating === 'rating') {
       render();
     }
+    handleMoreInfoClick();
   });
 }
 
@@ -159,11 +166,17 @@ function handleDeleteBookmark() {
   $('.deletebtn').click(function (event) {
     event.preventDefault();
     const id = getBookmarkId(event.currentTarget);
-    api.deleteBookmark(id).then(() => {
-      store.findAndDelete(id);
-      // homePage();
-      render();
-    });
+    api
+      .deleteBookmark(id)
+      .then(() => {
+        store.findAndDelete(id);
+        // homePage();
+        render();
+      })
+      .catch(function (err) {
+        console.log(err);
+        render.renderError(err);
+      });
   });
 }
 
@@ -192,8 +205,24 @@ function bindEventListeners() {
   handleMoreInfoClick();
 }
 
+function renderError(error) {
+  $('main').html(`<section class="main-error">
+  <div>We apologize for the inconvenience but you have hit an error.</div>
+  <div class="errormessage">Error message = ${error.message}</div>
+  <div class="errorcode">Error code = ${error.code}</div>
+</section>`);
+}
+function submitError(error) {
+  $('main').append(`<section class="main-error">
+  <div>Please fix the missing data:</div>
+  <div class="errormessage">Error message = ${error.message}</div>
+  <div class="errorcode">Error code = ${error.code}</div>
+</section>`);
+}
+
 export default {
   render,
   homePage,
   bindEventListeners,
+  renderError,
 };

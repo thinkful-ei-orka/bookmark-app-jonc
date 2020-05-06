@@ -32,7 +32,7 @@ function apiFetch(...args) {
  * Grabs the current bookmarks by running apiFetch() with URL variable
  */
 function getBookmarks() {
-  return apiFetch(`${BASE_URL}/bookmarks/`);
+  return apiFetch(`${BASE_URL}/bookmarks`);
 }
 
 /**
