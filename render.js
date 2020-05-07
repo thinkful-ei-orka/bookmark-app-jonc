@@ -19,14 +19,14 @@ function homePage() {
         </select>
       </section>
       <section class="bookmark-section">
-      <ul class="bookmark-list">
+      <ul>
 </ul>
 
       </section>`);
 }
 
 function handleAddBookmarkClicked() {
-  $('#addbookmark').click(function (e) {
+  $('main').on('click', '#addbookmark', function (e) {
     $('main').html(`
 
       <section class="addingbookmark">
@@ -49,29 +49,54 @@ function handleAddBookmarkClicked() {
     // handleBookmarkSubmit(); //This took me 5 hours to figure out... :( Ill never forget
   });
 }
-function renderMoreInfo(bookmark) {
-  let starSpan = '<span class="stars">★</span>';
-  $('main').html(`<section class="bookmark-info">
-  <h2>${bookmark.title}</h2>
-  <div class="starbox">
-    ${starSpan.repeat(bookmark.rating)}
-  </div>
-  <div class="full-bookmark-desc">${bookmark.desc}</div>
+function renderMoreInfo(target, bookmark) {
+  let bookmarkDesc = bookmark.desc;
+  const bookmarkUrl = bookmark.url;
+
+  $(target).replaceWith(`<section class="bookmark-info">
+
+  <div class="full-bookmark-desc">${bookmarkDesc}</div>
   <div class="full-bookmark-link">
-    <a href="${bookmark.url}">Visit Site</a>
+    <a href="${bookmarkUrl}">Visit Site</a>
   </div>
   <button class="backbutton"> Back</button>
 </section>`);
+  //   let starSpan = '<span class="stars">★</span>';
+  //   $('main').html(`<section class="bookmark-info">
+  //   <h2>${bookmark.title}</h2>
+  //   <div class="starbox">
+  //     ${starSpan.repeat(bookmark.rating)}
+  //   </div>
+  //   <div class="full-bookmark-desc">${bookmark.desc}</div>
+  //   <div class="full-bookmark-link">
+  //     <a href="${bookmark.url}">Visit Site</a>
+  //   </div>
+  //   <button class="backbutton"> Back</button>
+  // </section>`);
 }
 
 function handleMoreInfoClick() {
   $('main').on('click', '.moreinfo', function (e) {
-    event.preventDefault();
+    e.preventDefault();
+    const id = getBookmarkId(e.currentTarget);
 
-    const id = getBookmarkId(event.target);
+    const selectedBookmark = store.findById(id);
 
-    let selectedBookmark = store.findById(id);
-    renderMoreInfo(selectedBookmark);
+    //     this.replaceWith(`<section class="bookmark-info">
+
+    //   <div class="full-bookmark-desc">${selectedBookmark.desc}</div>
+    //   <div class="full-bookmark-link">
+    //     <a href="${selectedBookmark.url}">Visit Site</a>
+    //   </div>
+    //   <button class="backbutton"> Back</button>
+    // </section>`);
+    renderMoreInfo(this, selectedBookmark);
+
+    // let starSpan = '<span class="stars">★</span>';
+
+    // let selectedBookmark = store.findById(id);
+
+    // renderMoreInfo(selectedBookmark);
 
     // api.deleteBookmark(id).then(() => {
     //   store.findAndDelete(id);
@@ -96,10 +121,7 @@ function generateBookmarkItems(bookmark) {
   // let ratingNum = bookmark.rating;
   // let totalStars = generateStars([bookmark.rating]);
   let starSpan = '<span class="stars">★</span>';
-
   return `
-
-
         <li class="bookmark" data-item-id="${bookmark.id}">
           <span class="bookmark-name">${bookmark.title}</span>
 
@@ -108,7 +130,6 @@ function generateBookmarkItems(bookmark) {
  </div>
   <button class="moreinfo">More Info</button>
           <button class="deletebtn">Delete</button>
-
         </li>`;
 }
 
@@ -154,10 +175,14 @@ function handleRatingButton() {
     // Foreach object that has .rating >= the value of button
     let items = store.bookmarks;
     let filteredArray = items.filter((item) => item.rating >= setRating);
+    console.log(filteredArray);
+
     // Return new string of bookmarks
     const filteredString = generateBookmarks(filteredArray);
+    console.log(filteredString);
+
     // Render page
-    $('.bookmark-list').html(filteredString);
+    $('.bookmark-section ul').html(filteredString);
 
     // If rating is default, render home page
     if (setRating === 'rating') {
@@ -198,7 +223,7 @@ function render() {
 
   const bookmarksString = generateBookmarks(items);
 
-  $('.bookmark-section').html(bookmarksString);
+  $('.bookmark-section ul').html(bookmarksString);
   handleDeleteBookmark();
   handleMoreInfoClick();
 }
